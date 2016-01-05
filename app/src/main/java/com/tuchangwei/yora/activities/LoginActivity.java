@@ -7,19 +7,23 @@ import android.view.View;
 
 import com.tuchangwei.yora.R;
 
-/**
- * Created by vale on 1/4/16.
- */
-public class LoginActivity extends BaseActivity {
+public class LoginActivity extends BaseActivity implements View.OnClickListener {
+    private View loginButton;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        loginButton = findViewById(R.id.activity_login_login);
+        if (loginButton != null) {
+            loginButton.setOnClickListener(this);
+        }
     }
 
-    public void doLogin(View view) {
-        application.getAuth().getUser().setLoggedIn(true);
-        startActivity(new Intent(this, MainActivity.class));
-        finish();
+
+    @Override
+    public void onClick(View v) {
+        if (v == loginButton) {
+            startActivity(new Intent(this,LoginNarrowActivity.class));
+        }
     }
 }
