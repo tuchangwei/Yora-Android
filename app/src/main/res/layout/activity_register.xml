@@ -44,5 +44,13 @@
             android:background="@color/primary_color_dark"
             android:textColor="#FFFFFF"
             android:id="@+id/activity_register_register"/>
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/activity_register_progressBar"
+            android:indeterminateOnly="true"
+            android:layout_centerHorizontal="true"
+            android:layout_alignTop="@+id/activity_register_register"
+            android:layout_alignBottom="@+id/activity_register_register"/>
     </RelativeLayout>
 </LinearLayout>

@@ -13,6 +13,7 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
 
     private EditText userName, email, password;
     private Button registerBtn;
+    private View progressBar;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,7 +23,12 @@ public class RegisterActivity extends BaseActivity implements View.OnClickListen
         email = (EditText) findViewById(R.id.activity_register_email);
         password = (EditText) findViewById(R.id.activity_register_password);
         registerBtn = (Button) findViewById(R.id.activity_register_register);
+        progressBar = findViewById(R.id.activity_register_progressBar);
+
         registerBtn.setOnClickListener(this);
+        progressBar.setVisibility(View.GONE);
+
+
     }
 
     @Override
