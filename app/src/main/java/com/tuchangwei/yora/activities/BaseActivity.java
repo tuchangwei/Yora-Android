@@ -8,10 +8,12 @@ import android.support.v7.widget.Toolbar;
 
 import com.tuchangwei.yora.R;
 import com.tuchangwei.yora.infrastructure.YoraApplication;
+import com.tuchangwei.yora.views.NavDrawer;
 
 public abstract class BaseActivity extends ActionBarActivity {
     protected YoraApplication application;
     protected Toolbar toolbar;
+    protected NavDrawer navDrawer;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,5 +30,13 @@ public abstract class BaseActivity extends ActionBarActivity {
             setSupportActionBar(toolbar);
 
         }
+    }
+
+    protected void setNavDrawer(NavDrawer drawer) {
+        this.navDrawer = drawer;
+        this.navDrawer.create();
+    }
+    public Toolbar getToolbar(){
+        return toolbar;
     }
 }
