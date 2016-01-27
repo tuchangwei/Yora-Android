@@ -38,7 +38,12 @@ public class NavDrawer {
         }
         Toolbar toolbar = activity.getToolbar();
         toolbar.setNavigationIcon(R.drawable.ic_action_navigation_menu);
-
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setOpen(!isOpen());
+            }
+        });
     }
     public boolean isOpen() {
         return drawerLayout.isDrawerOpen(GravityCompat.START);
@@ -98,7 +103,14 @@ public class NavDrawer {
             ViewGroup container = (ViewGroup) navDrawerView.findViewById(containerId);
             if (container==null)
                 throw new RuntimeException("Nav drawer item " + text + " could not be attached to ViewGroup. View not found.");
-            view = inflater.inflate(R.layout.list_item_nav_drawer, container);
+//            The root View of the inflated hierarchy.
+// If root was supplied, this is the root View;
+// otherwise it is the root of the inflated XML file.
+//          这个方法，如果root View提供了，返回的就是root view。如果root没有提供，返回的才是xml的根view。
+//            view = inflater.inflate(R.layout.list_item_nav_drawer, container);
+            view = inflater.inflate(R.layout.list_item_nav_drawer, container,false);
+            container.addView(view);
+
             view.setOnClickListener(this);
 
             icon = (ImageView)view.findViewById(R.id.list_item_nav_drawer_icon);

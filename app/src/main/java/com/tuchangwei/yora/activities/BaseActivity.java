@@ -1,5 +1,6 @@
 package com.tuchangwei.yora.activities;
 
+import android.app.Application;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
@@ -37,6 +38,11 @@ public abstract class BaseActivity extends ActionBarActivity {
         this.navDrawer.create();
     }
     public Toolbar getToolbar(){
+
         return toolbar;
+    }
+
+    public YoraApplication getYoraApplication() {
+        return application;
     }
 }
