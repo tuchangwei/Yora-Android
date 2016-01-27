@@ -12,6 +12,7 @@ public class SentMessagesActivity extends BaseAuthenticatedActivity{
     @Override
     protected void onYoraCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_sent_messages);
+        getSupportActionBar().setTitle("Sent Messages");
         setNavDrawer(new MainNavDrawer(this));
     }
 }

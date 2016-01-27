@@ -1,11 +1,13 @@
 package com.tuchangwei.yora.activities;
 
+import android.animation.Animator;
 import android.app.Application;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 
 import com.tuchangwei.yora.R;
 import com.tuchangwei.yora.infrastructure.YoraApplication;
@@ -33,9 +35,38 @@ public abstract class BaseActivity extends ActionBarActivity {
         }
     }
 
+    public void fadeOut(final FadeOutListener listener) {
+        View rootView = findViewById(android.R.id.content);
+        rootView.animate().alpha(0).setListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                listener.onFadeOutEnd();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        }).setDuration(350).start();
+    }
     protected void setNavDrawer(NavDrawer drawer) {
         this.navDrawer = drawer;
         this.navDrawer.create();
+
+        overridePendingTransition(0,0);
+        View rootView = findViewById(android.R.id.content);
+        rootView.setAlpha(0);
+        rootView.animate().alpha(1).setDuration(150).start();
     }
     public Toolbar getToolbar(){
 
@@ -44,5 +75,10 @@ public abstract class BaseActivity extends ActionBarActivity {
 
     public YoraApplication getYoraApplication() {
         return application;
+    }
+
+
+    public interface FadeOutListener {
+        void onFadeOutEnd();
     }
 }

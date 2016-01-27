@@ -12,6 +12,7 @@ public class ContactsActivity extends BaseAuthenticatedActivity {
     @Override
     protected void onYoraCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_contacts);
+        getSupportActionBar().setTitle("Contacts");
         setNavDrawer(new MainNavDrawer(this));
     }
 }

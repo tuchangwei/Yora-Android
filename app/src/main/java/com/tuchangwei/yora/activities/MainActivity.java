@@ -12,7 +12,7 @@ public class MainActivity extends BaseAuthenticatedActivity {
     @Override
     protected void onYoraCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_main);
-        getSupportActionBar().setTitle("Yora");
+        getSupportActionBar().setTitle("Inbox");
         setNavDrawer(new MainNavDrawer(this));
     }
 }

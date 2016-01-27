@@ -188,9 +188,15 @@ public class NavDrawer {
             if (this.navDrawer.activity.getClass() == targetActivity) return;
             super.onClick(v);
 
-            //TODO: animation
-            navDrawer.activity.startActivity(new Intent(navDrawer.activity,targetActivity));
-            navDrawer.activity.finish();
+            final BaseActivity activity = navDrawer.activity;
+            activity.fadeOut(new BaseActivity.FadeOutListener() {
+                @Override
+                public void onFadeOutEnd() {
+
+                    activity.startActivity(new Intent(activity,targetActivity));
+                    activity.finish();
+                }
+            });
         }
     }
 }
