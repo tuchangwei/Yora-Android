@@ -7,6 +7,7 @@ import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.view.View;
 
 import com.tuchangwei.yora.R;
@@ -17,11 +18,14 @@ public abstract class BaseActivity extends ActionBarActivity {
     protected YoraApplication application;
     protected Toolbar toolbar;
     protected NavDrawer navDrawer;
+    protected boolean isTablet;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         application = (YoraApplication)getApplication();
 
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        isTablet = displayMetrics.widthPixels/displayMetrics.density >= 600;
 
     }
 
