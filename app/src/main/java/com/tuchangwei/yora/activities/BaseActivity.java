@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.view.View;
 
+import com.squareup.otto.Bus;
 import com.tuchangwei.yora.R;
 import com.tuchangwei.yora.infrastructure.YoraApplication;
 import com.tuchangwei.yora.views.NavDrawer;
@@ -19,14 +20,23 @@ public abstract class BaseActivity extends ActionBarActivity {
     protected Toolbar toolbar;
     protected NavDrawer navDrawer;
     protected boolean isTablet;
+    protected Bus bus;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         application = (YoraApplication)getApplication();
+        bus = application.getBus();
 
         DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
         isTablet = displayMetrics.widthPixels/displayMetrics.density >= 600;
 
+        bus.register(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        bus.unregister(this);
     }
 
     @Override

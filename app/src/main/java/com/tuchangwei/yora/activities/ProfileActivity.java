@@ -1,6 +1,8 @@
 package com.tuchangwei.yora.activities;
 
+import android.app.Dialog;
 import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.media.Image;
@@ -17,9 +19,11 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.soundcloud.android.crop.Crop;
+import com.squareup.otto.Subscribe;
 import com.tuchangwei.yora.R;
 import com.tuchangwei.yora.dialogs.ChangePasswordDialog;
 import com.tuchangwei.yora.infrastructure.User;
+import com.tuchangwei.yora.services.Account;
 import com.tuchangwei.yora.views.MainNavDrawer;
 
 import java.io.File;
@@ -37,7 +41,7 @@ public class ProfileActivity extends BaseAuthenticatedActivity implements View.O
     private static final int STATE_EDITING = 2;
 
     private static final String BUNDLE_STATE = "BUNDLE_STATE";
-
+    private static  boolean isProgressBarVisible;
     private int currentState;
     private EditText displayNameText;
     private EditText emailText;
@@ -46,6 +50,7 @@ public class ProfileActivity extends BaseAuthenticatedActivity implements View.O
     private ImageView avatarView;
     private View avatarProcessFrame;
     private File tempOutputFile;
+    private Dialog progressDialog;
 
     @Override
     protected void onYoraCreate(Bundle savedInstanceState) {
@@ -83,7 +88,24 @@ public class ProfileActivity extends BaseAuthenticatedActivity implements View.O
         } else {
             changeState(savedInstanceState.getInt(BUNDLE_STATE));
         }
+        if (isProgressBarVisible) {
+            setProgressBarVisible(true);
+        }
+    }
 
+    private void setProgressBarVisible(boolean b) {
+        if (b) {
+            progressDialog = new ProgressDialog.Builder(this)
+                    .setTitle("Update Profile")
+                    .setCancelable(false)
+                    .show();
+
+        } else if (progressDialog != null) {
+            progressDialog.dismiss();
+            progressDialog = null;
+        }
+
+        isProgressBarVisible = b;
     }
 
     @Override
@@ -136,12 +158,28 @@ public class ProfileActivity extends BaseAuthenticatedActivity implements View.O
 
             Crop.of(outputFile, tempFileUrl).asSquare().start(this);
         } else if (requestCode == Crop.REQUEST_CROP) {
-            //// TODO: 1/29/16 Send tempFileUri to server as nav avatar
-            avatarView.setImageResource(0);
-            avatarView.setImageURI(Uri.fromFile(tempOutputFile));
+            avatarProcessFrame.setVisibility(View.VISIBLE);
+            bus.post(new Account.ChangeAvatarRequest(Uri.fromFile(tempOutputFile)));
         }
     }
 
+    @Subscribe
+    public void onAvatarUpdated(Account.ChangeAvatarResponse response) {
+        avatarProcessFrame.setVisibility(View.GONE);
+
+        if (!response.didSucceed())
+            response.showErrorToast(this);
+    }
+    @Subscribe
+    public void onProfileUpdated(Account.UpdateProfileResponse response) {
+        if (!response.didSucceed()) {
+            response.showErrorToast(this);
+            changeState(STATE_EDITING);
+        }
+        displayNameText.setError(response.getPropertyError("displayName"));
+        emailText.setError(response.getPropertyError("email"));
+        setProgressBarVisible(false);
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -213,12 +251,12 @@ public class ProfileActivity extends BaseAuthenticatedActivity implements View.O
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             int itemId = item.getItemId();
             if (itemId == R.id.activity_profile_edit_menuDone) {
-                // TODO: 1/30/16 Send request to update display name and email
-                User user = application.getAuth().getUser();
-                user.setDisplayName(displayNameText.getText().toString());
-                user.setEmail(emailText.getText().toString());
 
+                setProgressBarVisible(true);
                 changeState(STATE_VIEWING);
+                bus.post(new Account.UpdateProfileRequest(
+                        displayNameText.getText().toString(),
+                        emailText.getText().toString()));
                 return true;
             }
             return false;
