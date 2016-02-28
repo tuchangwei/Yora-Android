@@ -12,6 +12,7 @@ import android.view.View;
 
 import com.squareup.otto.Bus;
 import com.tuchangwei.yora.R;
+import com.tuchangwei.yora.infrastructure.ActionScheduler;
 import com.tuchangwei.yora.infrastructure.YoraApplication;
 import com.tuchangwei.yora.views.NavDrawer;
 
@@ -21,12 +22,15 @@ public abstract class BaseActivity extends ActionBarActivity {
     protected NavDrawer navDrawer;
     protected boolean isTablet;
     protected Bus bus;
+
+
+    protected ActionScheduler scheduler;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         application = (YoraApplication)getApplication();
         bus = application.getBus();
-
+        scheduler = new ActionScheduler(application);
         DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
         isTablet = displayMetrics.widthPixels/displayMetrics.density >= 600;
 
@@ -40,6 +44,22 @@ public abstract class BaseActivity extends ActionBarActivity {
         if (navDrawer != null) {
             navDrawer.destroy();
         }
+    }
+
+    public ActionScheduler getScheduler() {
+        return scheduler;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        scheduler.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        scheduler.onResume();
     }
 
     @Override
