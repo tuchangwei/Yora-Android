@@ -56,7 +56,7 @@ public final class Account {
             ClientId = "android";
         }
     }
-    public static class LoginWithExternalTokenResponse {
+    public static class LoginWithExternalTokenResponse extends  UserResponse {
 
     }
     public static class RegisterRequest {

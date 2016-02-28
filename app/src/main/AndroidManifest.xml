@@ -26,6 +26,7 @@
         <activity android:name=".activities.LoginNarrowActivity"/>
         <activity android:name=".activities.RegisterActivity"/>
         <activity android:name=".activities.ExternalLoginActivity"/>
+        <activity android:name=".activities.AuthenticationActivity"/>
         <activity android:name=".activities.SentMessagesActivity"/>
         <activity android:name=".activities.ContactsActivity"/>
         <activity android:name=".activities.ProfileActivity"/>

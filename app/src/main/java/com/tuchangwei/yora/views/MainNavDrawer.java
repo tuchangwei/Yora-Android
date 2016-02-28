@@ -5,6 +5,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.otto.Subscribe;
 import com.tuchangwei.yora.R;
 import com.tuchangwei.yora.activities.BaseActivity;
 import com.tuchangwei.yora.activities.ContactsActivity;
@@ -12,6 +13,7 @@ import com.tuchangwei.yora.activities.MainActivity;
 import com.tuchangwei.yora.activities.ProfileActivity;
 import com.tuchangwei.yora.activities.SentMessagesActivity;
 import com.tuchangwei.yora.infrastructure.User;
+import com.tuchangwei.yora.services.Account;
 
 /**
  * Created by vale on 1/24/16.
@@ -31,7 +33,8 @@ public class MainNavDrawer extends NavDrawer {
         addItem(new BasicNavDrawerItem("Logout",null,R.drawable.ic_action_backspace,R.id.include_main_nav_drawer_bottomItems){
             @Override
             public void onClick(View v) {
-                Toast.makeText(activity,"You have logged out!",Toast.LENGTH_SHORT).show();
+
+                activity.getYoraApplication().getAuth().logout();
             }
         });
 
@@ -42,5 +45,10 @@ public class MainNavDrawer extends NavDrawer {
         displayNameText.setText(loggedInUser.getDisplayName());
         
         //// TODO: 1/27/16 change avatarImage to avatarUrl from loggedInUser.
+    }
+    @Subscribe
+    public void onUserDetailsUpdated(Account.UserDetailsUpdatedEvent event) {
+        // TODO: 2/20/16 update avatar URL
+        displayNameText.setText(event.user.getDisplayName());
     }
 }

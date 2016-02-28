@@ -39,11 +39,13 @@ public class NavDrawer {
         Toolbar toolbar = activity.getToolbar();
         toolbar.setNavigationIcon(R.drawable.ic_action_navigation_menu);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 setOpen(!isOpen());
             }
         });
+        activity.getYoraApplication().getBus().register(this);
     }
     public boolean isOpen() {
         return drawerLayout.isDrawerOpen(GravityCompat.START);
@@ -73,6 +75,9 @@ public class NavDrawer {
         for (NavDrawerItem item :items) {
             item.inflate(layoutInflater, navDrawerView);
         }
+    }
+    public void destroy() {
+        activity.getYoraApplication().getBus().unregister(this);
     }
     public static abstract class NavDrawerItem {
         protected NavDrawer navDrawer;
