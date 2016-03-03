@@ -17,6 +17,8 @@ import com.tuchangwei.yora.infrastructure.YoraApplication;
 import com.tuchangwei.yora.views.NavDrawer;
 
 public abstract class BaseActivity extends ActionBarActivity {
+
+    private boolean isRegisterWithBus;
     protected YoraApplication application;
     protected Toolbar toolbar;
     protected NavDrawer navDrawer;
@@ -35,15 +37,31 @@ public abstract class BaseActivity extends ActionBarActivity {
         isTablet = displayMetrics.widthPixels/displayMetrics.density >= 600;
 
         bus.register(this);
+        isRegisterWithBus = true;
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        bus.unregister(this);
+        if (isRegisterWithBus == true) {
+
+            bus.unregister(this);
+            isRegisterWithBus = false;
+        }
         if (navDrawer != null) {
             navDrawer.destroy();
         }
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        if (isRegisterWithBus == true) {
+
+            bus.unregister(this);
+            isRegisterWithBus = false;
+        }
+
     }
 
     public ActionScheduler getScheduler() {

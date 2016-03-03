@@ -6,4 +6,5 @@
     <color name="primary_color_dark">#2196F3</color>
     <color name="primary_color_darker">#3F51B5</color>
     <color name="list_item_nav_drawer_selected_item_text_color">#2196F3</color>
+    <color name="contacts_pengding_contact_requests">#607D8B</color>
 </resources>

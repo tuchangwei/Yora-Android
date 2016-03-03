@@ -8,11 +8,21 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <include layout="@layout/include_toolbar"/>
-        <TextView
+        <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/include_toolbar"
+            android:background="?attr/colorPrimary">
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/activity_contacts_spinner"
+                style="@style/Widget.Yora.Toolbar.Spinner"/>
+        </android.support.v7.widget.Toolbar>
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Contacts"/>
+            android:id="@+id/activity_contacts_fragment_container"/>
     </LinearLayout>
     <include layout="@layout/include_main_nav_drawer"/>
 </android.support.v4.widget.DrawerLayout>
